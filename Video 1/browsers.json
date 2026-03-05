@@ -1,0 +1,22 @@
+{
+  "chrome": {
+    "default": "latest",
+    "versions": {
+      "latest": {
+        "image": [
+          "/opt/homebrew/bin/chromedriver"
+        ]
+      }
+    }
+  },
+  "firefox": {
+    "default": "latest",
+    "version": {
+      "latest": {
+        "image": [
+          "/opt/homebrew/bin/geckodriver"
+        ]
+      }
+    }
+  }
+}

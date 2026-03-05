@@ -1,0 +1,11 @@
+{
+  "yandex": {
+      "default": "latest",
+      "versions": {
+        "latest": {
+          "image": ["/Users/aleksandrcernega/miniconda/envs/skillbox/lib/python3.9/site-packages/chromedriver"]
+        }
+      }
+    }
+
+}

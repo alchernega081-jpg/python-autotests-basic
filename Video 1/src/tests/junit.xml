@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="13.056" timestamp="2026-03-03T17:17:52.449654+03:00" hostname="MacBook-Air-Aleksandr.local"><testcase classname="test_example.TestExample" name="test_example" time="6.435"><failure message="selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed&#10;from unknown error: web view not found&#10;  (Session info: chrome=145.0.7632.117)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001008afd84 cxxbridge1$str$ptr + 3127864&#10;1   chromedriver                        0x00000001008a8174 cxxbridge1$str$ptr + 3096104&#10;2   chromedriver                        0x00000001003859f4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75356&#10;3   chromedriver                        0x000000010035e8c4 chromedriver + 157892&#10;4   chromedriver                        0x00000001003f6994 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 538108&#10;5   chromedriver                        0x000000010040c6b4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 627484&#10;6   chromedriver                        0x00000001003c22bc _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 323364&#10;7   chromedriver                        0x000000010086e8a8 cxxbridge1$str$ptr + 2860380&#10;8   chromedriver                        0x0000000100871fe8 cxxbridge1$str$ptr + 2874524&#10;9   chromedriver                        0x0000000100853cc4 cxxbridge1$str$ptr + 2750840&#10;10  chromedriver                        0x000000010087286c cxxbridge1$str$ptr + 2876704&#10;11  chromedriver                        0x00000001008442cc cxxbridge1$str$ptr + 2686848&#10;12  chromedriver                        0x0000000100896f68 cxxbridge1$str$ptr + 3025948&#10;13  chromedriver                        0x00000001008970e4 cxxbridge1$str$ptr + 3026328&#10;14  chromedriver                        0x00000001008a7dcc cxxbridge1$str$ptr + 3095168&#10;15  libsystem_pthread.dylib             0x000000018b8e3c08 _pthread_start + 136&#10;16  libsystem_pthread.dylib             0x000000018b8deba8 thread_start + 8">self = &lt;test_example.TestExample object at 0x102ef9940&gt;
+set_up_browser = &lt;selenium.webdriver.remote.webdriver.WebDriver (session="3ea5ae45466d787a967043051cce1bac")&gt;
+
+    def test_example(self, set_up_browser):
+        print("\n=== Выполняется test_example 1 ===")
+        driver = set_up_browser
+        driver.get("https://skillbox.ru")
+&gt;       check_title( driver=driver, title='Skillbox – образовательная платформа с онлай-курсами.')
+
+../../test_example.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../test_example.py:27: in check_title
+    assert title == driver.title
+../../../miniconda/envs/skillbox/lib/python3.9/site-packages/selenium/webdriver/remote/webdriver.py:494: in title
+    return self.execute(Command.GET_TITLE).get("value", "")
+../../../miniconda/envs/skillbox/lib/python3.9/site-packages/selenium/webdriver/remote/webdriver.py:458: in execute
+    self.error_handler.check_response(response)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x102ef9d00&gt;
+response = {'status': 404, 'value': '{"value":{"error":"no such window","message":"no such window: target window already closed\\...00018b8e3c08 _pthread_start + 136\\n16  libsystem_pthread.dylib             0x000000018b8deba8 thread_start + 8\\n"}}'}
+
+    def check_response(self, response: dict[str, Any]) -&gt; None:
+        """Checks that a JSON response from the WebDriver does not have an
+        error.
+    
+        :Args:
+         - response - The JSON response from the WebDriver server as a dictionary
+           object.
+    
+        :Raises: If the response contains an error message.
+        """
+        status = response.get("status", None)
+        if not status or status == ErrorCode.SUCCESS:
+            return
+        value = None
+        message = response.get("message", "")
+        screen: str = response.get("screen", "")
+        stacktrace = None
+        if isinstance(status, int):
+            value_json = response.get("value", None)
+            if value_json and isinstance(value_json, str):
+                try:
+                    value = json.loads(value_json)
+                    if isinstance(value, dict):
+                        if len(value) == 1:
+                            value = value["value"]
+                        status = value.get("error", None)
+                        if not status:
+                            status = value.get("status", ErrorCode.UNKNOWN_ERROR)
+                            message = value.get("value") or value.get("message")
+                            if not isinstance(message, str):
+                                value = message
+                                message = message.get("message") if isinstance(message, dict) else None
+                        else:
+                            message = value.get("message", None)
+                except ValueError:
+                    pass
+    
+        exception_class: type[WebDriverException]
+        e = ErrorCode()
+        error_codes = [item for item in dir(e) if not item.startswith("__")]
+        for error_code in error_codes:
+            error_info = getattr(ErrorCode, error_code)
+            if isinstance(error_info, list) and status in error_info:
+                exception_class = getattr(ExceptionMapping, error_code, WebDriverException)
+                break
+        else:
+            exception_class = WebDriverException
+    
+        if not value:
+            value = response["value"]
+        if isinstance(value, str):
+            raise exception_class(value)
+        if message == "" and "message" in value:
+            message = value["message"]
+    
+        screen = None  # type: ignore[assignment]
+        if "screen" in value:
+            screen = value["screen"]
+    
+        stacktrace = None
+        st_value = value.get("stackTrace") or value.get("stacktrace")
+        if st_value:
+            if isinstance(st_value, str):
+                stacktrace = st_value.split("\n")
+            else:
+                stacktrace = []
+                try:
+                    for frame in st_value:
+                        line = frame.get("lineNumber", "")
+                        file = frame.get("fileName", "&lt;anonymous&gt;")
+                        if line:
+                            file = f"{file}:{line}"
+                        meth = frame.get("methodName", "&lt;anonymous&gt;")
+                        if "className" in frame:
+                            meth = f"{frame['className']}.{meth}"
+                        msg = "    at %s (%s)"
+                        msg = msg % (meth, file)
+                        stacktrace.append(msg)
+                except TypeError:
+                    pass
+        if exception_class == UnexpectedAlertPresentException:
+            alert_text = None
+            if "data" in value:
+                alert_text = value["data"].get("text")
+            elif "alert" in value:
+                alert_text = value["alert"].get("text")
+            raise exception_class(message, screen, stacktrace, alert_text)  # type: ignore[call-arg]  # mypy is not smart enough here
+&gt;       raise exception_class(message, screen, stacktrace)
+E       selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+E       from unknown error: web view not found
+E         (Session info: chrome=145.0.7632.117)
+E       Stacktrace:
+E       0   chromedriver                        0x00000001008afd84 cxxbridge1$str$ptr + 3127864
+E       1   chromedriver                        0x00000001008a8174 cxxbridge1$str$ptr + 3096104
+E       2   chromedriver                        0x00000001003859f4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75356
+E       3   chromedriver                        0x000000010035e8c4 chromedriver + 157892
+E       4   chromedriver                        0x00000001003f6994 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 538108
+E       5   chromedriver                        0x000000010040c6b4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 627484
+E       6   chromedriver                        0x00000001003c22bc _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 323364
+E       7   chromedriver                        0x000000010086e8a8 cxxbridge1$str$ptr + 2860380
+E       8   chromedriver                        0x0000000100871fe8 cxxbridge1$str$ptr + 2874524
+E       9   chromedriver                        0x0000000100853cc4 cxxbridge1$str$ptr + 2750840
+E       10  chromedriver                        0x000000010087286c cxxbridge1$str$ptr + 2876704
+E       11  chromedriver                        0x00000001008442cc cxxbridge1$str$ptr + 2686848
+E       12  chromedriver                        0x0000000100896f68 cxxbridge1$str$ptr + 3025948
+E       13  chromedriver                        0x00000001008970e4 cxxbridge1$str$ptr + 3026328
+E       14  chromedriver                        0x00000001008a7dcc cxxbridge1$str$ptr + 3095168
+E       15  libsystem_pthread.dylib             0x000000018b8e3c08 _pthread_start + 136
+E       16  libsystem_pthread.dylib             0x000000018b8deba8 thread_start + 8
+
+../../../miniconda/envs/skillbox/lib/python3.9/site-packages/selenium/webdriver/remote/errorhandler.py:232: NoSuchWindowException</failure></testcase><testcase classname="test_example.TestExample" name="test_example_2" time="6.535"><failure message="selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed&#10;from unknown error: web view not found&#10;  (Session info: chrome=145.0.7632.117)&#10;Stacktrace:&#10;0   chromedriver                        0x00000001011cbd84 cxxbridge1$str$ptr + 3127864&#10;1   chromedriver                        0x00000001011c4174 cxxbridge1$str$ptr + 3096104&#10;2   chromedriver                        0x0000000100ca19f4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75356&#10;3   chromedriver                        0x0000000100c7a8c4 chromedriver + 157892&#10;4   chromedriver                        0x0000000100d12994 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 538108&#10;5   chromedriver                        0x0000000100d286b4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 627484&#10;6   chromedriver                        0x0000000100cde2bc _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 323364&#10;7   chromedriver                        0x000000010118a8a8 cxxbridge1$str$ptr + 2860380&#10;8   chromedriver                        0x000000010118dfe8 cxxbridge1$str$ptr + 2874524&#10;9   chromedriver                        0x000000010116fcc4 cxxbridge1$str$ptr + 2750840&#10;10  chromedriver                        0x000000010118e86c cxxbridge1$str$ptr + 2876704&#10;11  chromedriver                        0x00000001011602cc cxxbridge1$str$ptr + 2686848&#10;12  chromedriver                        0x00000001011b2f68 cxxbridge1$str$ptr + 3025948&#10;13  chromedriver                        0x00000001011b30e4 cxxbridge1$str$ptr + 3026328&#10;14  chromedriver                        0x00000001011c3dcc cxxbridge1$str$ptr + 3095168&#10;15  libsystem_pthread.dylib             0x000000018b8e3c08 _pthread_start + 136&#10;16  libsystem_pthread.dylib             0x000000018b8deba8 thread_start + 8">self = &lt;test_example.TestExample object at 0x102ef9a60&gt;
+set_up_browser = &lt;selenium.webdriver.remote.webdriver.WebDriver (session="7fc98daf9030dfa6e74b7b7acfe3c23a")&gt;
+
+    def test_example_2(self, set_up_browser): # Test Case
+        print("\n=== Выполняется test_example 2 ===")
+        driver = set_up_browser
+        driver.get("https://skillbox.ru")
+&gt;       check_title(driver=driver, title='Skillbox ')
+
+../../test_example.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../test_example.py:27: in check_title
+    assert title == driver.title
+../../../miniconda/envs/skillbox/lib/python3.9/site-packages/selenium/webdriver/remote/webdriver.py:494: in title
+    return self.execute(Command.GET_TITLE).get("value", "")
+../../../miniconda/envs/skillbox/lib/python3.9/site-packages/selenium/webdriver/remote/webdriver.py:458: in execute
+    self.error_handler.check_response(response)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x103b0ffd0&gt;
+response = {'status': 404, 'value': '{"value":{"error":"no such window","message":"no such window: target window already closed\\...00018b8e3c08 _pthread_start + 136\\n16  libsystem_pthread.dylib             0x000000018b8deba8 thread_start + 8\\n"}}'}
+
+    def check_response(self, response: dict[str, Any]) -&gt; None:
+        """Checks that a JSON response from the WebDriver does not have an
+        error.
+    
+        :Args:
+         - response - The JSON response from the WebDriver server as a dictionary
+           object.
+    
+        :Raises: If the response contains an error message.
+        """
+        status = response.get("status", None)
+        if not status or status == ErrorCode.SUCCESS:
+            return
+        value = None
+        message = response.get("message", "")
+        screen: str = response.get("screen", "")
+        stacktrace = None
+        if isinstance(status, int):
+            value_json = response.get("value", None)
+            if value_json and isinstance(value_json, str):
+                try:
+                    value = json.loads(value_json)
+                    if isinstance(value, dict):
+                        if len(value) == 1:
+                            value = value["value"]
+                        status = value.get("error", None)
+                        if not status:
+                            status = value.get("status", ErrorCode.UNKNOWN_ERROR)
+                            message = value.get("value") or value.get("message")
+                            if not isinstance(message, str):
+                                value = message
+                                message = message.get("message") if isinstance(message, dict) else None
+                        else:
+                            message = value.get("message", None)
+                except ValueError:
+                    pass
+    
+        exception_class: type[WebDriverException]
+        e = ErrorCode()
+        error_codes = [item for item in dir(e) if not item.startswith("__")]
+        for error_code in error_codes:
+            error_info = getattr(ErrorCode, error_code)
+            if isinstance(error_info, list) and status in error_info:
+                exception_class = getattr(ExceptionMapping, error_code, WebDriverException)
+                break
+        else:
+            exception_class = WebDriverException
+    
+        if not value:
+            value = response["value"]
+        if isinstance(value, str):
+            raise exception_class(value)
+        if message == "" and "message" in value:
+            message = value["message"]
+    
+        screen = None  # type: ignore[assignment]
+        if "screen" in value:
+            screen = value["screen"]
+    
+        stacktrace = None
+        st_value = value.get("stackTrace") or value.get("stacktrace")
+        if st_value:
+            if isinstance(st_value, str):
+                stacktrace = st_value.split("\n")
+            else:
+                stacktrace = []
+                try:
+                    for frame in st_value:
+                        line = frame.get("lineNumber", "")
+                        file = frame.get("fileName", "&lt;anonymous&gt;")
+                        if line:
+                            file = f"{file}:{line}"
+                        meth = frame.get("methodName", "&lt;anonymous&gt;")
+                        if "className" in frame:
+                            meth = f"{frame['className']}.{meth}"
+                        msg = "    at %s (%s)"
+                        msg = msg % (meth, file)
+                        stacktrace.append(msg)
+                except TypeError:
+                    pass
+        if exception_class == UnexpectedAlertPresentException:
+            alert_text = None
+            if "data" in value:
+                alert_text = value["data"].get("text")
+            elif "alert" in value:
+                alert_text = value["alert"].get("text")
+            raise exception_class(message, screen, stacktrace, alert_text)  # type: ignore[call-arg]  # mypy is not smart enough here
+&gt;       raise exception_class(message, screen, stacktrace)
+E       selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+E       from unknown error: web view not found
+E         (Session info: chrome=145.0.7632.117)
+E       Stacktrace:
+E       0   chromedriver                        0x00000001011cbd84 cxxbridge1$str$ptr + 3127864
+E       1   chromedriver                        0x00000001011c4174 cxxbridge1$str$ptr + 3096104
+E       2   chromedriver                        0x0000000100ca19f4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 75356
+E       3   chromedriver                        0x0000000100c7a8c4 chromedriver + 157892
+E       4   chromedriver                        0x0000000100d12994 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 538108
+E       5   chromedriver                        0x0000000100d286b4 _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 627484
+E       6   chromedriver                        0x0000000100cde2bc _RNvCsdExgN8vFLbb_7___rustc35___rust_no_alloc_shim_is_unstable_v2 + 323364
+E       7   chromedriver                        0x000000010118a8a8 cxxbridge1$str$ptr + 2860380
+E       8   chromedriver                        0x000000010118dfe8 cxxbridge1$str$ptr + 2874524
+E       9   chromedriver                        0x000000010116fcc4 cxxbridge1$str$ptr + 2750840
+E       10  chromedriver                        0x000000010118e86c cxxbridge1$str$ptr + 2876704
+E       11  chromedriver                        0x00000001011602cc cxxbridge1$str$ptr + 2686848
+E       12  chromedriver                        0x00000001011b2f68 cxxbridge1$str$ptr + 3025948
+E       13  chromedriver                        0x00000001011b30e4 cxxbridge1$str$ptr + 3026328
+E       14  chromedriver                        0x00000001011c3dcc cxxbridge1$str$ptr + 3095168
+E       15  libsystem_pthread.dylib             0x000000018b8e3c08 _pthread_start + 136
+E       16  libsystem_pthread.dylib             0x000000018b8deba8 thread_start + 8
+
+../../../miniconda/envs/skillbox/lib/python3.9/site-packages/selenium/webdriver/remote/errorhandler.py:232: NoSuchWindowException</failure></testcase></testsuite></testsuites>
