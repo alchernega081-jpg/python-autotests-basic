@@ -1,0 +1,8 @@
+[2026-03-25 12:13:18][INFO][request][conftest.py:40] Starting browser initialization...
+[2026-03-25 12:13:21][INFO][request][conftest.py:55] Browser started successfully. Session ID: c45a7bca0bad040c3a4529690004500d
+[2026-03-25 12:13:21][INFO][request][accounts_base.py:16] Navigating to URL: http://github.com
+[2026-03-25 12:13:22][INFO][request][accounts_base.py:18] Successfully loaded page: http://github.com
+[2026-03-25 12:13:22][INFO][request][test_async_wait.py:20] Starting test: test_wait_page_load
+[2026-03-25 12:13:22][INFO][request][test_async_wait.py:26] Successfully found element on page
+[2026-03-25 12:13:22][INFO][request][conftest.py:60] Closing browser...
+[2026-03-25 12:13:22][INFO][request][conftest.py:63] Browser closed successfully

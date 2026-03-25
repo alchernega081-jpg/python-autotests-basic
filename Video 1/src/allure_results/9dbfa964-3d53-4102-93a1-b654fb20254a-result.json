@@ -1,0 +1,1 @@
+{"name": "test_send_mask", "status": "passed", "start": 1773478503942, "stop": 1773478797391, "uuid": "845b352c-0308-403e-b6d7-cc444352edc4", "testCaseId": "1dc104064cccc4ec894f47df0da8e2d1", "fullName": "src.test_input.TestInput#test_send_mask", "titlePath": ["src", "test_input.py", "TestInput"]}

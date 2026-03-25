@@ -1,0 +1,12 @@
+[2026-03-25 12:13:27][INFO][request][conftest.py:40] Starting browser initialization...
+[2026-03-25 12:13:29][INFO][request][conftest.py:55] Browser started successfully. Session ID: 1654d85eeff91727d3c9deee79e08dbf
+[2026-03-25 12:13:29][INFO][request][test_async_wait.py:44] Starting test: test_wait_dialog
+[2026-03-25 12:13:29][INFO][request][test_async_wait.py:47] Navigating to URL: https://m1vcki.csb.app/
+[2026-03-25 12:13:30][INFO][request][test_async_wait.py:50] Waiting for name input field
+[2026-03-25 12:13:34][INFO][request][test_async_wait.py:53] Filling form fields...
+[2026-03-25 12:13:34][INFO][request][test_async_wait.py:60] Submitting form
+[2026-03-25 12:13:34][INFO][request][test_async_wait.py:63] Waiting for OK button
+[2026-03-25 12:13:37][INFO][request][test_async_wait.py:68] Clicking OK button
+[2026-03-25 12:13:37][INFO][request][test_async_wait.py:71] Test completed successfully
+[2026-03-25 12:13:37][INFO][request][conftest.py:60] Closing browser...
+[2026-03-25 12:13:37][INFO][request][conftest.py:63] Browser closed successfully

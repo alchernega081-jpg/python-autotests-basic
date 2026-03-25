@@ -1,0 +1,8 @@
+INFO     request:conftest.py:40 Starting browser initialization...
+INFO     request:conftest.py:55 Browser started successfully. Session ID: d9175ba03c2928b45fedec206c5d7aac
+INFO     logging:accounts_base.py:16 Navigating to URL: http://github.com
+INFO     logging:accounts_base.py:18 Successfully loaded page: http://github.com
+INFO     logging:test_async_wait.py:20 Starting test: test_wait_page_load
+INFO     logging:test_async_wait.py:26 Successfully found element on page
+INFO     request:conftest.py:60 Closing browser...
+INFO     request:conftest.py:63 Browser closed successfully

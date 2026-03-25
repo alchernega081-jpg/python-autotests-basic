@@ -1,0 +1,12 @@
+INFO     request:conftest.py:40 Starting browser initialization...
+INFO     request:conftest.py:55 Browser started successfully. Session ID: f3eef5428c74f08bbe5ecd48e4315b68
+INFO     request:test_async_wait.py:44 Starting test: test_wait_dialog
+INFO     request:test_async_wait.py:47 Navigating to URL: https://m1vcki.csb.app/
+INFO     request:test_async_wait.py:50 Waiting for name input field
+INFO     request:test_async_wait.py:53 Filling form fields...
+INFO     request:test_async_wait.py:60 Submitting form
+INFO     request:test_async_wait.py:63 Waiting for OK button
+INFO     request:test_async_wait.py:68 Clicking OK button
+INFO     request:test_async_wait.py:71 Test completed successfully
+INFO     request:conftest.py:60 Closing browser...
+INFO     request:conftest.py:63 Browser closed successfully
