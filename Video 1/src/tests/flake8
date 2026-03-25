@@ -1,0 +1,21 @@
+[flake8]
+max-line-length = 120
+select = E, W
+exclude =
+    .venv,
+    .venv1,
+    venv,
+    .env,
+    env,
+    __pycache__,
+    .git,
+    build,
+    dist,
+    accounts/allure_results,
+    src/accounts/allure_results,
+    */allure_results
+ignore = E501, W503, E203, E402, E401, F401, E241, E226, E704, E301, F821, E128, E111, E261, E114, E116, E265
+filename =
+    tests/**/*.py,
+    src/tests/**/*.py,
+    src/accounts/**/*.py
