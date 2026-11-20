@@ -29,14 +29,21 @@ jobs:
           pip install webdriver-manager
 
       - name: Run tests
-        working-directory: Video 1/src/finaly_project
-        shell: bash -l {0}
+        # Переходим в папку, где лежат сами .py файлы
+        working-directory: Video 1/src/finaly_project/major_test_suit
         run: |
-          pytest . -v --alluredir=allure-results
+          # Инициализация и активация
+          conda init bash
+          source ~/.bashrc
+          conda activate Video_1
+
+          # Используем прямой путь к pytest
+          /home/runner/miniconda3/envs/Video_1/bin/pytest . -v --alluredir=allure-results
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: allure-results
-          path: Video 1/src/finaly_project/allure-results/ # Путь исправлен под working-directory
+          # Путь исправлен согласно новому working-directory
+          path: Video 1/src/finaly_project/major_test_suit/allure-results/
