@@ -21,7 +21,7 @@ jobs:
         run: |
           conda env create -f "Video 1/environment.yml"
           conda activate Video_1
-          # Установка selenium и менеджера драйверов через pip
+            # Установка selenium и менеджера драйверов через pip
           pip install selenium webdriver-manager
 
       - name: Run tests
