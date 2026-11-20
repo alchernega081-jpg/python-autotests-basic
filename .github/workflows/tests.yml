@@ -19,6 +19,6 @@ jobs:
           pip install pytest selenium requests
 
       - name: Run tests
-        working-directory: "Video 1/src/finaly_project/major_test_suit/test_bonus_flow_system.py"
+        working-directory: "Video 1/src/finaly_project/major_test_suit"
         run: |
           pytest . -v
