@@ -20,4 +20,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest "Video 1/src/finaly_project/major_test_suit/" -v --headless
+          pytest "Video 1/src/finaly_project/major_test_suit/" -v

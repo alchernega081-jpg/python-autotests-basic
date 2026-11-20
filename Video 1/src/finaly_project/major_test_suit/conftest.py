@@ -2,6 +2,7 @@ import os
 import logging
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 # Создаем папку для логов, если её нет
 log_dir = os.path.join(os.path.dirname(__file__), 'logs')
@@ -29,6 +30,28 @@ logger.info("Логирование настроено")
 logger.info(f"Логи будут сохранены в: {log_file_path}")
 
 
+#@pytest.fixture(scope="function")
+#def set_up_browser():
+    #"""Фикстура для инициализации и закрытия браузера"""
+    #logger = logging.getLogger(__name__)
+
+    #logger.info("=" * 50)
+    #logger.info("Инициализация нового теста")
+
+    #driver = webdriver.Chrome()
+    #driver.maximize_window()
+    #logger.debug("Драйвер Chrome инициализирован, окно развернуто")
+
+    #yield driver
+
+    #logger.info("Закрытие драйвера Chrome")
+    #driver.quit()
+    #logger.info("Тест завершен")
+    #logger.info("=" * 50)
+    #driver.quit()
+    #logger.info("Тест завершен")
+    #logger.info("=" * 50)
+
 @pytest.fixture(scope="function")
 def set_up_browser():
     """Фикстура для инициализации и закрытия браузера"""
@@ -37,16 +60,20 @@ def set_up_browser():
     logger.info("=" * 50)
     logger.info("Инициализация нового теста")
 
-    driver = webdriver.Chrome()
+    # ✅ Настройка headless-режима для GitHub Actions
+    options = Options()
+    options.add_argument("--headless=new")       # без окна браузера
+    options.add_argument("--no-sandbox")         # для Linux-окружения GitHub
+    options.add_argument("--disable-dev-shm-usage")  # предотвращает падение Chrome
+    options.add_argument("--window-size=1920,1080")
+
+    driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     logger.debug("Драйвер Chrome инициализирован, окно развернуто")
 
     yield driver
 
     logger.info("Закрытие драйвера Chrome")
-    driver.quit()
-    logger.info("Тест завершен")
-    logger.info("=" * 50)
     driver.quit()
     logger.info("Тест завершен")
     logger.info("=" * 50)
