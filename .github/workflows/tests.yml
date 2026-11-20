@@ -19,8 +19,10 @@ jobs:
 
       - name: Create environment and install dependencies
         run: |
-          conda env create -f environment.yml
+          conda env create -f "Video 1/environment.yml"
           conda activate Video_1
+          # Установка selenium и менеджера драйверов через pip
+          pip install selenium webdriver-manager
 
       - name: Run tests
         working-directory: Video 1/src/finaly_project

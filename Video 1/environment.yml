@@ -6,7 +6,6 @@ dependencies:
   - python=3.10
   - requests=2.26.0
   - selenium
-  - python-chrome-binary=145.0.7632.76
   - pytest
   - pip  # <-- Эта строка обязательна
   - pip:
@@ -14,4 +13,4 @@ dependencies:
   #- chromium
   #- pip
   #- pip:
-  #- python-chrome-binary==145.0.7632.76
+  #
