@@ -1,0 +1,1 @@
+[33mWARNING [0m test_bonus_flow_system:test_bonus_flow_system.py:56 Элементы формы не найдены, перезагружаем страницу

@@ -15,33 +15,22 @@ jobs:
         with:
           auto-update-conda: true
           python-version: '3.10'
-          auto-activate-base: false # Важно: не активировать base автоматически
+          auto-activate: false # Исправлено с устаревшего auto-activate-base
 
       - name: Create environment and install dependencies
         run: |
           conda env create -f environment.yml
-          # Если окружение в файле называется Video_1
           conda activate Video_1
 
       - name: Run tests
-        # Переходим в папку, где лежит pytest.ini (корень тестов)
         working-directory: Video 1/src/finaly_project
-        shell: bash -l {0} # Важно: shell: bash -l заставляет шаг использовать активированное Conda окружение
+        shell: bash -l {0}
         run: |
           pytest . -v --alluredir=allure-results
 
       - name: Upload Allure results
         uses: actions/upload-artifact@v4
-        if: always() # Загружать артефакты даже если тесты упали
+        if: always()
         with:
           name: allure-results
-          path: Video 1/src/finaly_project/allure-results/
-
-      - name: Generate and publish Allure report (опционально)
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          # Полный путь к папке с готовым отчетом
-          publish_dir: Video 1/src/finaly_project/allure-results/
+          path: Video 1/src/finaly_project/allure-results/ # Путь исправлен под working-directory

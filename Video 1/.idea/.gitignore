@@ -1,3 +1,53 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Pytest
+.cache
+.pytest_cache/
+coverage.xml
+htmlcov/
+.coverage
+.coverage.*
+*.cover
+.hypothesis/
+
+# Logs
+*.log
+logs/
+*.pid
+
+# PyCharm / IntelliJ
+.idea/
+.vscode/
+.vs/
+
+# Allure local results (чтобы не коммитить отчеты)
+allure-report/
+*.attach
+*.json
+*.txt
+*.png
