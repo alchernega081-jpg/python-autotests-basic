@@ -19,13 +19,11 @@ jobs:
 
       - name: Create environment and install dependencies
         run: |
-          # Инициализация conda для текущей оболочки
           conda init bash
-          # Источник (source) нужен, чтобы команды conda стали доступны в текущем скрипте
           source ~/.bashrc
-          
-          # Теперь активация сработает
+          conda env create -f "Video 1/environment.yml"
           conda activate Video_1
+          pip install webdriver-manager
           
           # Установка selenium и менеджера драйверов через pip (для Linux)
           pip install webdriver-manager
