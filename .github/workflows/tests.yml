@@ -19,7 +19,7 @@ jobs:
 
       - name: Create environment and install dependencies
         run: |
-          conda env create -f environment.yml
+          conda env create -f "Video 1/environment.yml"
           conda activate Video_1
 
       - name: Run tests
