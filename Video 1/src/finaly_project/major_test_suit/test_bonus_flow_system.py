@@ -32,9 +32,9 @@ class TestCases:
     5. Проверяет успешность регистрации
     """
     )
-    def test_case_6(self, set_up_browser):
-        """TC-006: Регистрация в бонусной программе с проверкой валидации"""
-        driver = set_up_browser
+    def test_case_6(self, browser):
+        """TC-006: Регистрация в бонусной программе с проверкой валидации меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("=" * 60)

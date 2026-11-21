@@ -37,9 +37,10 @@ class TestCases:
     5. Переходит в корзину и проверяет наличие всех добавленных пицц
     """
     )
-    def test_case_1(self, set_up_browser):
-        """TC-001: Добавление трех пицц в корзину и проверка их наличия"""
-        driver = set_up_browser
+    def test_case_1(self, browser):
+        """TC-001: Добавление трех пицц в корзину и проверка их наличия (
+        меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_case_1 - Добавление пицц в корзину")
@@ -117,9 +118,9 @@ class TestCases:
     Этот тест выбирает пиццу 'Как у бабушки' с сырным бортом и добавляет в корзину
     """
     )
-    def test_case_2(self, set_up_browser):
-        """TC-002: Заказ пиццы с дополнительной опцией"""
-        driver = set_up_browser
+    def test_case_2(self, browser):
+        """TC-002: Заказ пиццы с дополнительной опцией меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_case_2 - Заказ пиццы с опциями")
@@ -160,9 +161,9 @@ class TestCases:
     Этот тест проверяет изменение количества и удаление товара из корзины
     """
     )
-    def test_case_3(self, set_up_browser):
-        """TC-003: Изменение количества товаров и проверка суммы"""
-        driver = set_up_browser
+    def test_case_3(self, browser):
+        """TC-003: Изменение количества товаров и проверка суммы меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_case_3 - Управление корзиной")
@@ -229,9 +230,9 @@ class TestCases:
     Этот тест проверяет фильтрацию десертов до 135 руб
     """
     )
-    def test_case_4(self, set_up_browser):
-        """TC-004: Фильтрация десертов по максимальной цене"""
-        driver = set_up_browser
+    def test_case_4(self, browser):
+        """TC-004: Фильтрация десертов по максимальной цене меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_case_4 - Фильтрация десертов")
@@ -280,9 +281,9 @@ class TestCases:
     Полный цикл: фильтрация десертов → добавление → авторизация → оформление заказа
     """
     )
-    def test_case_5(self, set_up_browser):
-        """TC-005: Полный цикл оформления заказа"""
-        driver = set_up_browser
+    def test_case_5(self, browser):
+        """TC-005: Полный цикл оформления заказа меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_case_5 - Полный цикл оформления заказа")

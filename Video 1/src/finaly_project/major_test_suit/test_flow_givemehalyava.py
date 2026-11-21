@@ -28,9 +28,9 @@ class TestPromocodeGIVEMEHALYAVA:
         4. Убедиться, что конечная сумма заказа уменьшилась на 10%
         """
     )
-    def test_promocode_givemehalyava_works(self, set_up_browser):
-        """TC-PROMO-001: Проверка применения валидного промокода"""
-        driver = set_up_browser
+    def test_promocode_givemehalyava_works(self, browser):
+        """TC-PROMO-001: Проверка применения валидного промокода меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_promocode_givemehalyava_works")
@@ -179,9 +179,9 @@ class TestPromocodeGIVEMEHALYAVA:
         4. Убедиться, что конечная сумма заказа НЕ уменьшилась на 10% и промокод не применился
         """
     )
-    def test_invalid_promocode_dc120_does_not_apply(self, set_up_browser):
-        """TC-PROMO-002: Проверка невалидного промокода"""
-        driver = set_up_browser
+    def test_invalid_promocode_dc120_does_not_apply(self, browser):
+        """TC-PROMO-002: Проверка невалидного промокода меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_invalid_promocode_dc120_does_not_apply")
@@ -284,8 +284,8 @@ class TestPromocodeGIVEMEHALYAVA:
         Ожидаемое поведение: сайт должен показать сообщение, что не удалось применить промокод
         """
     )
-    def test_promocode_server_down(self, set_up_browser):
-        """TC-PROMO-003: Проверка при недоступности сервера валидации"""
+    def test_promocode_server_down(self, browser):
+        """TC-PROMO-003: Проверка при недоступности сервера валидации меняем set_up_browser на browser"""
         pytest.skip("Тест требует настройки BrowserMob Proxy. Для запуска нужно:\n"
                     "1. Установить BrowserMob Proxy: https://github.com/lightbody/browsermob-proxy\n"
                     "2. Указать правильный путь к browsermob-proxy в коде\n"
@@ -303,9 +303,9 @@ class TestPromocodeGIVEMEHALYAVA:
         5. Убедиться, что второй раз промокод не срабатывает
         """
     )
-    def test_promocode_one_time_only(self, set_up_browser):
-        """TC-PROMO-004: Проверка однократности применения промокода"""
-        driver = set_up_browser
+    def test_promocode_one_time_only(self, browser):
+        """TC-PROMO-004: Проверка однократности применения промокода меняем set_up_browser на browser"""
+        driver = browser
         logger = logging.getLogger(__name__)
 
         logger.info("START: test_promocode_one_time_only")
