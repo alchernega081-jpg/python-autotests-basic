@@ -1,1 +1,0 @@
-{"uuid": "7f8d63c1-29ec-42a3-962f-27b032089d49", "children": ["19d18f92-e732-48e4-99f3-f08e6c654b9a"], "befores": [{"name": "go_to_github", "status": "passed", "steps": [{"name": "Открытие страницы http://github.com", "status": "passed", "start": 1774430325338, "stop": 1774430326717}], "start": 1774430325338, "stop": 1774430326717}], "start": 1774430325338, "stop": 1774430326744}
