@@ -227,7 +227,12 @@ class TestCases:
             try:
                 button = pizza_card.find_element(By.CSS_SELECTOR, '.add_to_cart_button')
             except:
-                button = pizza_card.find_element(By.XPATH, ".//a[contains(text(), 'В корзину')]")
+                # Ищем кнопку по классу внутри этой конкретной карточки
+                button = WebDriverWait(pizza_card, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, ".//button[contains(@class, 'add_to_cart')]")) )
+
+                #button = pizza_card.find_element(By.XPATH, ".//a[contains(
+                # text(), 'В корзину')]")
                 #button = pizza_card.find_element(By.XPATH, './/a[contains(
                 # text(), "В корзину")]')
             button.click()
@@ -352,7 +357,7 @@ class TestCases:
             # 2. Тянем ползунок влево (сдвиг по X на -170px)
             # Важно: drag_and_drop_by_offset работает от текущего положения.
             # Если слайдер в самом правом положении, -170 сдвинет его влево.
-            ActionChains(driver).drag_and_drop_by_offset(slider, -170,
+            ActionChains(driver).drag_and_drop_by_offset(slider, 170,
                                                          0).perform()
 
             # 3. Жмем кнопку "Применить" с ожиданием
@@ -467,9 +472,14 @@ class TestCases:
 
         # Шаг 8: Данные доставки
         with allure.step("Заполнение данных доставки"):
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.NAME, "billing_first_name"))
-            ).send_keys("Андрей")
+            # Увеличим ожидание до 15 секунд
+            name_field = WebDriverWait(driver, 15).until(
+                EC.presence_of_element_located((By.NAME, "billing_first_name")) )
+            name_field.send_keys("Александр")
+            #WebDriverWait(driver, 10).until(
+                #EC.presence_of_element_located((By.NAME,
+            # "billing_first_name"))
+            #).send_keys("Андрей")
             driver.find_element(By.NAME, "billing_last_name").send_keys("Иванов")
             driver.find_element(By.NAME, "billing_address_1").send_keys("ул. Ленина, д. 15")
             driver.find_element(By.NAME, "billing_city").send_keys("Москва")
