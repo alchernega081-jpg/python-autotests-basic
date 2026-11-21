@@ -182,18 +182,48 @@ class TestCases:
             try:
                 button = pizza_card.find_element(By.CSS_SELECTOR, '.add_to_cart_button')
             except:
-                button = pizza_card.find_element(By.XPATH, './/a[contains(text(), "В корзину")]')
+                button = pizza_card.find_element(By.XPATH, ".//a[contains(text(), 'В корзину')]")
+                #button = pizza_card.find_element(By.XPATH, './/a[contains(
+                # text(), "В корзину")]')
             button.click()
             time.sleep(1)
 
         with allure.step('Добавление пиццы "Как у бабушки" с сырным бортом'):
-            pizza_card = driver.find_element(By.XPATH, '(//*[@title= "Пицца «Как у бабушки»"])[3]')
+            # 1. Находим карточку и кликаем (с ожиданием кликабельности)
+            pizza_card = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '(//*[@title= "Пицца «Как у бабушки»"])[3]'))
+            )
             pizza_card.click()
-            time.sleep(2)
-            driver.find_element(By.NAME, "board_pack").click()
-            driver.find_element(By.XPATH, "//*[contains(text(), 'Сырный - 55.00 р.')]").click()
-            driver.find_element(By.CLASS_NAME, "single_add_to_cart_button").click()
-            time.sleep(2)
+            time.sleep(2)  # Даем время на анимацию открытия модального окна
+
+            # 2. Выбираем опцию (ищем LABEL или INPUT рядом с текстом)
+            # Это самый надежный способ: найти текст и пойти к соседнему input
+            cheese_option_input = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH,
+                                            "//label[contains(., 'Сырный - 55.00 р.')]/input"))
+            )
+            cheese_option_input.click()
+
+            # 3. Кнопка добавления в корзину (ищем по тексту внутри кнопки)
+            add_to_cart_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//button[contains(text(), 'В корзину')]"))
+            )
+            add_to_cart_btn.click()
+            time.sleep(2)  # Ждем закрытия модалки
+
+        #with allure.step('Добавление пиццы "Как у бабушки" с сырным бортом'):
+           #pizza_card = driver.find_element(By.XPATH, '(//*[@title= "Пицца
+            # «Как у бабушки»"])[3]')
+            #pizza_card.click()
+            #time.sleep(2)
+            #driver.find_element(By.NAME, "board_pack").click()
+            #driver.find_element(By.XPATH, "//*[contains(text(), 'Сырный -
+            # 55.00 р.')]").click()
+            #driver.find_element(By.CLASS_NAME,
+            # "single_add_to_cart_button").click()
+            #time.sleep(2)
 
         with allure.step("Открытие корзины"):
             driver.find_element(By.CLASS_NAME, "cart-contents").click()
@@ -206,14 +236,33 @@ class TestCases:
             time.sleep(1)
 
         with allure.step("Обновление корзины"):
-            update_btn = driver.find_element(By.NAME, "update_cart")
+            update_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.NAME, "update_cart"))
+            )
             driver.execute_script("arguments[0].click();", update_btn)
-            time.sleep(2)
+            # Ждем, пока пропадет лоадер или обновится цена
+            WebDriverWait(driver, 10).until(EC.staleness_of(update_btn))
+
+        #with allure.step("Обновление корзины"):
+            #update_btn = driver.find_element(By.NAME, "update_cart")
+            #driver.execute_script("arguments[0].click();", update_btn)
+            #time.sleep(2)
 
         with allure.step("Удаление второй пиццы"):
-            remove_btn = driver.find_element(By.XPATH, '(//a[@class="remove"])[2]')
+            remove_btn = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located(
+                    (By.XPATH, '(//a[@class="remove"])[2]'))
+            )
             driver.execute_script("arguments[0].click();", remove_btn)
-            time.sleep(2)
+            # Ждем, пока элемент исчезнет из DOM
+            WebDriverWait(driver, 10).until(
+                EC.invisibility_of_element(remove_btn))
+
+        #with allure.step("Удаление второй пиццы"):
+            #remove_btn = driver.find_element(By.XPATH, '(//a[
+            # @class="remove"])[2]')
+            #driver.execute_script("arguments[0].click();", remove_btn)
+            #time.sleep(2)
 
         with allure.step("Проверка суммы"):
             total = WebDriverWait(driver, 10).until(
@@ -249,11 +298,28 @@ class TestCases:
             time.sleep(2)
 
         with allure.step("Установка фильтра до 135 руб"):
-            slider = driver.find_element(By.XPATH, '(//span[@class="ui-slider-handle"])[2]')
-            ActionChains(driver).drag_and_drop_by_offset(slider, -170, 0).perform()
-            time.sleep(2)
-            driver.find_element(By.XPATH, '//button[contains(text(), "Применить")]').click()
-            time.sleep(2)
+            # 1. Ждем, пока слайдер станет кликабельным
+            slider = WebDriverWait(driver, 15).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//span[contains(@class, 'ui-slider-handle')]"))
+            )
+
+            # 2. Тянем ползунок влево (сдвиг по X на -170px)
+            # Важно: drag_and_drop_by_offset работает от текущего положения.
+            # Если слайдер в самом правом положении, -170 сдвинет его влево.
+            ActionChains(driver).drag_and_drop_by_offset(slider, -170,
+                                                         0).perform()
+
+            # 3. Жмем кнопку "Применить" с ожиданием
+            apply_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '//button[contains(text(), "Применить")]'))
+            )
+            apply_button.click()
+
+            # 4. (Опционально) Ждем, пока товары обновятся (появится лоадер или исчезнет старый список)
+            time.sleep(
+                2)  # Здесь сон допустим, чтобы дать серверу вернуть новые данные
 
         with allure.step("Проверка цен"):
             prices_elements = driver.find_elements(By.XPATH, "//span[@class='woocommerce-Price-amount amount']/bdi")
