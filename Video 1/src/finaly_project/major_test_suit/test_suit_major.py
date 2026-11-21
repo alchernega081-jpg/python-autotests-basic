@@ -53,11 +53,32 @@ class TestCases:
         driver.execute_script("window.scrollBy(0, 400);")
         time.sleep(1)
 
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+
+        # ... внутри теста ...
+
         with allure.step('Добавление пиццы "Рай" в корзину'):
             logger.info("Добавление пиццы 'Рай'")
-            pizza_card = driver.find_element(By.XPATH, '(//*[@title= "Пицца «Рай»"])[3]')
+            pizza_card = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '(//*[@title= "Пицца «Рай»"])[3]'))
+            )
             ActionChains(driver).move_to_element(pizza_card).perform()
-            time.sleep(1)
+            time.sleep(1)  # Даем время на анимацию появления кнопки
+
+            # Ищем кнопку ВНУТРИ карточки с ожиданием
+            button = WebDriverWait(pizza_card, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, ".//a[contains(text(), 'В корзину')]"))
+            )
+            button.click()
+
+        #with allure.step('Добавление пиццы "Рай" в корзину'):
+            #logger.info("Добавление пиццы 'Рай'")
+            #pizza_card = driver.find_element(By.XPATH, '(//*[@title= "Пицца «Рай»"])[3]')
+            #ActionChains(driver).move_to_element(pizza_card).perform()
+            #time.sleep(1)
 
             try:
                 button = pizza_card.find_element(By.CSS_SELECTOR, '.add_to_cart_button')
@@ -130,10 +151,34 @@ class TestCases:
             time.sleep(2)
 
         with allure.step('Выбор пиццы "Как у бабушки"'):
-            driver.execute_script("window.scrollBy(0, 400);")
-            time.sleep(1)
-            driver.find_element(By.XPATH, '(//*[@title= "Пицца «Как у бабушки»"])[3]').click()
+            # Ждем, пока карточку можно будет нажать
+            pizza_card = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, '(//*[@title= "Пицца «Как у бабушки»"])[3]'))
+            )
+            pizza_card.click()
             time.sleep(2)
+
+            # Выбор борта (тоже ждем)
+            driver.find_element(By.NAME, "board_pack").click()
+            WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//*[contains(text(), 'Сырный - 55.00 р.')]"))
+            ).click()
+
+            # Кнопка добавления
+            WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.CLASS_NAME, "single_add_to_cart_button"))
+            ).click()
+            time.sleep(2)
+
+        #with allure.step('Выбор пиццы "Как у бабушки"'):
+            #driver.execute_script("window.scrollBy(0, 400);")
+            #time.sleep(1)
+            #driver.find_element(By.XPATH, '(//*[@title= "Пицца «Как у
+            # бабушки»"])[3]').click()
+            #time.sleep(2)
 
         with allure.step('Добавление опции "Сырный борт"'):
             driver.find_element(By.NAME, "board_pack").click()
